@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="State-of-the-art agricultural logistics optimizer with real-time APMC mandi pricing, thermal transit decay modeling, and net financial realization solver.">
+  <meta name="theme-color" content="#060911">
+  <title>AgriRoute Intelligence - Multi-Mandi Route Optimization & Transit Decay Platform</title>
+
+  <!-- Google Fonts Preconnect -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- Top Real-Time Mandi Ticker Bar -->
+  <aside class="ticker-bar" aria-label="Live Mandi Market Price Feed">
+    <div class="ticker-label">
+      <span class="ticker-pulse-dot"></span> Live Mandi Ticker
+    </div>
+    <div class="ticker-marquee" id="tickerMarquee">
+      <!-- Injected dynamically via JS -->
+    </div>
+  </aside>
+
+  <!-- Main Navigation Header -->
+  <header class="navbar">
+    <div class="nav-brand">
+      <div class="brand-icon-wrapper">
+        <img src="assets/logo.jpg" alt="AgriRoute Intelligence Logo" width="44" height="44">
+      </div>
+      <div class="brand-info">
+        <h1>AgriRoute Intelligence</h1>
+        <p class="brand-tagline">Perishability Decay Kinetics & Multi-Mandi Economic Arbitrage</p>
+      </div>
+    </div>
+
+    <div class="nav-actions">
+      <div class="status-indicator" id="apiStatusBadge">
+        <span class="ticker-pulse-dot"></span> Initializing Engine...
+      </div>
+      <button class="btn-secondary" id="simulateShockBtn" title="Simulate market price shocks">
+        ⚡ Price Volatility
+      </button>
+      <button class="btn-primary" id="exportReportBtn">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+          <polyline points="7 10 12 15 17 10"></polyline>
+          <line x1="12" y1="15" x2="12" y2="3"></line>
+        </svg>
+        Audit Dispatch
+      </button>
+    </div>
+  </header>
+
+  <!-- Data Mode & Provenance Banner -->
+  <div id="dataModeBanner" class="data-mode-banner verified" style="display:none;">
+    <span class="banner-tag">AUTHENTIC DATA</span>
+    <span>Source: <strong>AGMARKNET / DMI</strong> • Latest Observation: <strong>2026-10-10</strong></span>
+  </div>
+
+  <!-- Application Layout -->
+  <main class="app-container">
+
+    <!-- Left Controls Panel -->
+    <aside class="sidebar-panel">
+
+      <!-- Consignment Settings Card -->
+      <section class="card" aria-labelledby="settingsHeading">
+        <div class="card-header">
+          <h2 class="card-title" id="settingsHeading">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="3"></circle>
+              <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path>
+            </svg>
+            Consignment Specs
+          </h2>
+          <span class="badge-pill">Nashik Hub</span>
+        </div>
+
+        <!-- Farm Origin -->
+        <div class="form-group">
+          <label class="form-label" for="originSelect">Dispatch Origin Cluster</label>
+          <select id="originSelect" class="form-select">
+            <option value="Nashik Farm Cluster (MH)">Nashik Farm Cluster (Maharashtra)</option>
+            <option value="Pune Khed Agro Belt (MH)">Pune Khed Agro Belt (Maharashtra)</option>
+            <option value="Indore Malwa Cluster (MP)">Indore Malwa Cluster (Madhya Pradesh)</option>
+            <option value="Kolar Tomato Cluster (KA)">Kolar Tomato Cluster (Karnataka)</option>
+          </select>
+        </div>
+
+        <!-- Crop Selector -->
+        <div class="form-group">
+          <label class="form-label">Harvest Commodity</label>
+          <div class="crop-grid" id="cropGrid">
+            <!-- Injected dynamically via JS -->
+          </div>
+        </div>
+
+        <!-- Quantity Slider -->
+        <div class="form-group">
+          <div class="form-label">
+            <span>Consignment Weight</span>
+            <span class="value-highlight" id="quantityDisplay">5,000 kg (5.0 MT)</span>
+          </div>
+          <input type="range" class="slider-range" id="quantitySlider" min="500" max="25000" step="500" value="5000">
+        </div>
+
+        <!-- Vehicle Type Selector -->
+        <div class="form-group">
+          <label class="form-label">Logistics Fleet Type</label>
+          <div class="vehicle-selector" id="vehicleSelector">
+            <div class="vehicle-option" data-vehicle="open_truck">
+              <span class="vehicle-title">🚛 Open Canter Truck</span>
+              <span class="vehicle-meta">Economy Freight • High Decay</span>
+            </div>
+            <div class="vehicle-option active" data-vehicle="covered_truck">
+              <span class="vehicle-title">🚚 Covered Ventilated</span>
+              <span class="vehicle-meta">Standard APMC Choice</span>
+            </div>
+            <div class="vehicle-option" data-vehicle="reefer_cold">
+              <span class="vehicle-title">❄️ Reefer Cold-Chain (+4°C)</span>
+              <span class="vehicle-meta">80% Spoilage Damping</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ambient Temperature Slider -->
+        <div class="form-group">
+          <div class="form-label">
+            <span>Ambient Transit Temp</span>
+            <span class="value-highlight" id="tempDisplay">32°C</span>
+          </div>
+          <input type="range" class="slider-range" id="tempSlider" min="15" max="46" step="1" value="32">
+        </div>
+
+        <!-- Fuel Price Surcharge -->
+        <div class="form-group">
+          <div class="form-label">
+            <span>Fuel & Toll Multiplier</span>
+            <span class="value-highlight" id="fuelDisplay">1.00x</span>
+          </div>
+          <input type="range" class="slider-range" id="fuelSlider" min="0.8" max="1.6" step="0.05" value="1.0">
+        </div>
+
+        <!-- Decision Horizon & Forecasting Policy -->
+        <div class="form-group">
+          <label class="form-label">
+            <span>Market Decision Horizon</span>
+            <span class="value-highlight" id="horizonDisplay">Immediate</span>
+          </label>
+          <div class="horizon-btn-group" id="horizonButtonGroup">
+            <button class="horizon-btn active" data-horizon="0" data-policy="immediate">Immediate</button>
+            <button class="horizon-btn" data-horizon="3" data-policy="forecast_aware">3D Model</button>
+            <button class="horizon-btn" data-horizon="7" data-policy="forecast_aware">7D Model</button>
+          </div>
+        </div>
+      </section>
+
+    </aside>
+
+    <!-- Right Analytics & Execution Content -->
+    <section class="main-content">
+
+      <!-- Executive KPI Cards Row -->
+      <div class="kpi-row">
+        <!-- Top Recommended Mandi -->
+        <div class="kpi-card highlight">
+          <div class="kpi-card-label">
+            <span>Top Recommended Mandi</span>
+            <span style="color:var(--emerald-400); font-weight:800;">★ RANK 1</span>
+          </div>
+          <div class="kpi-value emerald" id="kpiTopMandi">Vashi APMC</div>
+          <div class="kpi-subtext" id="kpiTopMandiSub">175 km • 4.5h transit</div>
+        </div>
+
+        <!-- Net Realization In-Pocket -->
+        <div class="kpi-card">
+          <div class="kpi-card-label">
+            <span>Net Realization</span>
+            <span style="color:var(--emerald-400);">In Pocket</span>
+          </div>
+          <div class="kpi-value emerald" id="kpiNetRealization">₹158,200</div>
+          <div class="kpi-subtext" id="kpiNetPerKg">Net in-pocket: <strong>₹31.64 / kg</strong></div>
+        </div>
+
+        <!-- Arbitrage Advantage -->
+        <div class="kpi-card">
+          <div class="kpi-card-label">
+            <span>Arbitrage Advantage</span>
+            <span style="color:var(--amber-400);">Opportunity</span>
+          </div>
+          <div class="kpi-value" id="kpiArbitrageDiff">+₹14,200</div>
+          <div class="kpi-subtext" id="kpiArbitrageSub">vs Local Hub</div>
+        </div>
+
+        <!-- Freshness Index Retained -->
+        <div class="kpi-card">
+          <div class="kpi-card-label">
+            <span>Freshness Retained</span>
+            <span style="color:var(--cyan-400);">Q10 Kinetics</span>
+          </div>
+          <div class="kpi-value cyan" id="kpiFreshnessScore">94.8%</div>
+          <div class="kpi-subtext" id="kpiFreshnessSub">Loss: <strong>5.2%</strong> (260 kg)</div>
+        </div>
+      </div>
+
+      <!-- Corridor Canvas & Financial Waterfall -->
+      <div class="dual-grid">
+
+        <!-- Corridor Route Visualizer -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="1 6 1 22 8 18 16 22 23 18 23 2 16 6 8 2 1 6"></polygon>
+                <line x1="8" y1="2" x2="8" y2="18"></line>
+                <line x1="16" y1="6" x2="16" y2="22"></line>
+              </svg>
+              Transit Corridors & Cargo Tracking
+            </h3>
+            <span class="badge-pill">Real-Time Simulation</span>
+          </div>
+
+          <div class="corridor-canvas-container">
+            <canvas id="corridorCanvas" class="corridor-canvas"></canvas>
+            <div class="map-legend">
+              <div class="legend-item"><span class="legend-dot" style="background:#f59e0b;"></span> Origin Cluster</div>
+              <div class="legend-item"><span class="legend-dot" style="background:#10b981;"></span> Recommended Mandi</div>
+              <div class="legend-item"><span class="legend-dot" style="background:#38bdf8;"></span> Transit Vehicle</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Financial Waterfall Cost Breakdown -->
+        <div class="card">
+          <div class="card-header">
+            <h3 class="card-title">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="1" x2="12" y2="23"></line>
+                <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+              </svg>
+              Financial Realization Waterfall
+            </h3>
+            <span class="badge-pill">Unit Economics</span>
+          </div>
+
+          <div class="waterfall-list">
+            <!-- Gross Revenue -->
+            <div class="waterfall-item">
+              <div class="waterfall-header">
+                <span class="waterfall-title">Gross Turnover at Mandi</span>
+                <span class="waterfall-amount" id="wfGrossRevenue">₹192,500</span>
+              </div>
+              <div class="bar-track"><div class="bar-fill revenue" style="width: 100%;"></div></div>
+            </div>
+
+            <!-- Transport & Freight -->
+            <div class="waterfall-item">
+              <div class="waterfall-header">
+                <span class="waterfall-title">(-) Commercial Freight & Tolls</span>
+                <span class="waterfall-amount deduction" id="wfFreightCost">- ₹7,250</span>
+              </div>
+              <div class="bar-track"><div class="bar-fill freight" id="wfFreightBar" style="width: 14%;"></div></div>
+            </div>
+
+            <!-- Spoilage Loss -->
+            <div class="waterfall-item">
+              <div class="waterfall-header">
+                <span class="waterfall-title">(-) Spoilage & Transit Decay</span>
+                <span class="waterfall-amount deduction" id="wfSpoilageLoss">- ₹9,800</span>
+              </div>
+              <div class="bar-track"><div class="bar-fill spoilage" id="wfSpoilageBar" style="width: 18%;"></div></div>
+            </div>
+
+            <!-- APMC Cess -->
+            <div class="waterfall-item">
+              <div class="waterfall-header">
+                <span class="waterfall-title">(-) APMC Market Cess (1.2%)</span>
+                <span class="waterfall-amount deduction" id="wfMarketCess">- ₹2,310</span>
+              </div>
+              <div class="bar-track"><div class="bar-fill cess" id="wfCessBar" style="width: 6%;"></div></div>
+            </div>
+
+            <!-- Handling & Labor -->
+            <div class="waterfall-item">
+              <div class="waterfall-header">
+                <span class="waterfall-title">(-) Handling & Sorting</span>
+                <span class="waterfall-amount deduction" id="wfHandlingCost">- ₹4,250</span>
+              </div>
+              <div class="bar-track"><div class="bar-fill freight" id="wfHandlingBar" style="width: 8%;"></div></div>
+            </div>
+
+            <!-- Net In Pocket -->
+            <div class="waterfall-item" style="margin-top: 6px;">
+              <div class="waterfall-header">
+                <span class="waterfall-title" style="color:var(--emerald-400); font-weight:700;">= NET REALIZATION IN-POCKET</span>
+                <span class="waterfall-amount net" id="wfNetProfit">₹168,890</span>
+              </div>
+              <div class="bar-track"><div class="bar-fill net" id="wfNetBar" style="width: 85%;"></div></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Multi-Mandi Leaderboard Table -->
+      <div class="card">
+        <div class="card-header">
+          <h3 class="card-title">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+              <line x1="8" y1="21" x2="16" y2="21"></line>
+              <line x1="12" y1="17" x2="12" y2="21"></line>
+            </svg>
+            Multi-Mandi Arbitrage & Realization Leaderboard
+          </h3>
+          <span class="badge-pill">Sorted by Net Realization</span>
+        </div>
+
+        <div class="table-responsive">
+          <table class="mandi-table" aria-label="Mandi arbitrage comparison table">
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Mandi / APMC Terminal</th>
+                <th>Distance / ETA</th>
+                <th>Freshness</th>
+                <th>Price (Obs / Fcst)</th>
+                <th>Freight Cost</th>
+                <th>Net In-Pocket</th>
+                <th>Dispatch Decision</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboardBody">
+              <!-- Dynamically populated rows -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Walk-Forward Model Evaluation Card -->
+      <div class="card eval-card" id="evalCard">
+        <div class="card-header">
+          <h3 class="card-title" style="color:var(--emerald-400);">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+              <polyline points="22 4 12 14.01 9 11.01"></polyline>
+            </svg>
+            Walk-Forward Model Evaluation & Error Benchmark
+          </h3>
+          <span class="badge-pill" id="evalSamplesBadge">785 Evaluated Observations</span>
+        </div>
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:8px;">
+          Chronological rolling-origin evaluation on out-of-sample data (no future leakage).
+          <em style="color:var(--text-dim);">Historical backtesting performance does not guarantee future accuracy.</em>
+        </p>
+
+        <div class="eval-grid">
+          <div class="eval-stat-box">
+            <div class="eval-stat-label">3D LightGBM Model MAE</div>
+            <div class="eval-stat-val" style="color:var(--emerald-400);" id="evalLgbm3dMae">₹0.90 / kg</div>
+            <div class="eval-stat-sub" id="evalLgbm3dWape">WAPE: 2.5%</div>
+          </div>
+          <div class="eval-stat-box">
+            <div class="eval-stat-label">3D Baseline (Naive) MAE</div>
+            <div class="eval-stat-val" style="color:var(--amber-400);" id="evalNaive3dMae">₹11.09 / kg</div>
+            <div class="eval-stat-sub">Persistence Reference</div>
+          </div>
+          <div class="eval-stat-box">
+            <div class="eval-stat-label">7D Horizon Model MAE</div>
+            <div class="eval-stat-val" style="color:var(--cyan-400);" id="eval7dMae">₹0.37 / kg</div>
+            <div class="eval-stat-sub" id="eval7dWinner">Winner: Last-Observed</div>
+          </div>
+          <div class="eval-stat-box">
+            <div class="eval-stat-label">Prediction Interval Coverage</div>
+            <div class="eval-stat-val" style="color:var(--text-main);" id="evalIntervalCov">77.7%</div>
+            <div class="eval-stat-sub">Target: 80% Empirical Band</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Actionable Agronomic & Market Intelligence -->
+      <div class="card insights-card">
+        <div class="card-header">
+          <h3 class="card-title" style="color:var(--cyan-400);">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+            Actionable Strategic Intelligence
+          </h3>
+          <span class="badge-pill" style="color:var(--cyan-400); background:rgba(6, 182, 212, 0.12);">AI Logistics Advisor</span>
+        </div>
+        <div class="insight-bullets" id="insightsList">
+          <!-- Dynamically populated insights -->
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- Financial Audit Receipt Modal -->
+  <div class="modal-overlay" id="auditModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h3 id="modalTitle" style="font-family:var(--font-brand); font-size:16px;">
+          Consignment Dispatch & Realization Bill
+        </h3>
+        <button class="close-btn" id="closeModalBtn" aria-label="Close dialog">&times;</button>
+      </div>
+      <p id="modalMandiName" style="color:var(--emerald-400); font-weight:700; margin-bottom:10px;"></p>
+
+      <table class="receipt-table">
+        <tbody id="receiptBody">
+          <!-- Filled dynamically -->
+        </tbody>
+      </table>
+
+      <div style="display:flex; justify-content:flex-end; gap:10px; margin-top:16px;">
+        <button class="btn-secondary" onclick="window.print()">🖨️ Print Receipt</button>
+        <button class="btn-primary" onclick="document.getElementById('auditModal').classList.remove('active')">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="js/engine.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

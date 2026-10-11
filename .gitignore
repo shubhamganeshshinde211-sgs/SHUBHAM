@@ -1,0 +1,24 @@
+# Python virtual environment and runtimes
+.python/
+venv/
+env/
+ENV/
+.venv/
+
+# Portable Git binaries
+.git_bin/
+setup_git.py
+
+# Byte-compiled / optimized / test cache files
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+
+# Environment and local configs
+.env
+.env.local
+
+# Operating System files
+.DS_Store
+Thumbs.db

@@ -1,0 +1,506 @@
+{
+  "audited_at": "2026-10-11T07:39:26.533305Z",
+  "total_evaluated_samples": 785,
+  "commodities": {
+    "tomato": {
+      "commodity_id": "tomato",
+      "evaluation_date_range": {
+        "start": "2026-09-15",
+        "end": "2026-10-10"
+      },
+      "models": [
+        {
+          "model_name": "last_observed",
+          "is_best_performing": false,
+          "metrics_3d": {
+            "horizon_days": 3,
+            "evaluated_observations_count": 157,
+            "mae": 11.09,
+            "rmse": 12.166,
+            "wape": 0.3048,
+            "directional_accuracy": 0.0,
+            "interval_coverage": null
+          },
+          "metrics_7d": {
+            "horizon_days": 7,
+            "evaluated_observations_count": 153,
+            "mae": 0.371,
+            "rmse": 0.476,
+            "wape": 0.0102,
+            "directional_accuracy": 0.0,
+            "interval_coverage": null
+          }
+        },
+        {
+          "model_name": "rolling_avg",
+          "is_best_performing": false,
+          "metrics_3d": {
+            "horizon_days": 3,
+            "evaluated_observations_count": 157,
+            "mae": 5.74,
+            "rmse": 6.975,
+            "wape": 0.1578,
+            "directional_accuracy": 1.0,
+            "interval_coverage": null
+          },
+          "metrics_7d": {
+            "horizon_days": 7,
+            "evaluated_observations_count": 153,
+            "mae": 5.766,
+            "rmse": 6.987,
+            "wape": 0.1586,
+            "directional_accuracy": 0.524,
+            "interval_coverage": null
+          }
+        },
+        {
+          "model_name": "seasonal_naive",
+          "is_best_performing": false,
+          "metrics_3d": {
+            "horizon_days": 3,
+            "evaluated_observations_count": 157,
+            "mae": 6.133,
+            "rmse": 7.795,
+            "wape": 0.1686,
+            "directional_accuracy": 0.86,
+            "interval_coverage": null
+          },
+          "metrics_7d": {
+            "horizon_days": 7,
+            "evaluated_observations_count": 153,
+            "mae": 6.147,
+            "rmse": 7.831,
+            "wape": 0.169,
+            "directional_accuracy": 0.503,
+            "interval_coverage": null
+          }
+        },
+        {
+          "model_name": "lightgbm",
+          "is_best_performing": true,
+          "metrics_3d": {
+            "horizon_days": 3,
+            "evaluated_observations_count": 157,
+            "mae": 0.898,
+            "rmse": 1.321,
+            "wape": 0.0247,
+            "directional_accuracy": 1.0,
+            "interval_coverage": 0.777
+          },
+          "metrics_7d": {
+            "horizon_days": 7,
+            "evaluated_observations_count": 153,
+            "mae": 0.538,
+            "rmse": 0.691,
+            "wape": 0.0148,
+            "directional_accuracy": 0.578,
+            "interval_coverage": 0.752
+          }
+        }
+      ],
+      "recommended_model_3d": "lightgbm",
+      "recommended_model_7d": "last_observed",
+      "audited_at": "2026-10-11T07:39:25.339345"
+    },
+    "onion": {
+      "commodity_id": "onion",
+      "evaluation_date_range": {
+        "start": "2026-09-15",
+        "end": "2026-10-10"
+      },
+      "models": [
+        {
+          "model_name": "last_observed",
+          "is_best_performing": false,
+          "metrics_3d": {
+            "horizon_days": 3,
+            "evaluated_observations_count": 157,
+            "mae": 8.03,
+            "rmse": 8.792,
+            "wape": 0.3062,
+            "directional_accuracy": 0.0,
+            "interval_coverage": null
+          },
+          "metrics_7d": {
+            "horizon_days": 7,
+            "evaluated_observations_count": 153,
+            "mae": 0.139,
+            "rmse": 0.178,
+            "wape": 0.0053,
+            "directional_accuracy": 0.0,
+            "interval_coverage": null
+          }
+        },
+        {
+          "model_name": "rolling_avg",
+          "is_best_performing": false,
+          "metrics_3d": {
+            "horizon_days": 3,
+            "evaluated_observations_count": 157,
+            "mae": 4.158,
+            "rmse": 5.036,
+            "wape": 0.1586,
+            "directional_accuracy": 1.0,
+            "interval_coverage": null
+          },
+          "metrics_7d": {
+            "horizon_days": 7,
+            "evaluated_observations_count": 153,
+            "mae": 4.176,
+            "rmse": 5.039,
+            "wape": 0.1594,
+            "directional_accuracy": 0.52,
+            "interval_coverage": null
+          }
+        },
+        {
+          "model_name": "seasonal_naive",
+          "is_best_performing": false,
+          "metrics_3d": {
+            "horizon_days": 3,
+            "evaluated_observations_count": 157,
+            "mae": 4.426,
+            "rmse": 5.604,
+            "wape": 0.1688,
+            "directional_accuracy": 0.86,
+            "interval_coverage": null
+          },
+          "metrics_7d": {
+            "horizon_days": 7,
+            "evaluated_observations_count": 153,
+            "mae": 4.422,
+            "rmse": 5.619,
+            "wape": 0.1688,
+            "directional_accuracy": 0.493,
+            "interval_coverage": null
+          }
+        },
+        {
+          "model_name": "lightgbm",
+          "is_best_performing": true,
+          "metrics_3d": {
+            "horizon_days": 3,
+            "evaluated_observations_count": 157,
+            "mae": 0.319,
+            "rmse": 0.402,
+            "wape": 0.0122,
+            "directional_accuracy": 1.0,
+            "interval_coverage": 0.911
+          },
+          "metrics_7d": {
+            "horizon_days": 7,
+            "evaluated_observations_count": 153,
+            "mae": 0.325,
+            "rmse": 0.397,
+            "wape": 0.0124,
+            "directional_accuracy": 0.534,
+            "interval_coverage": 0.922
+          }
+        }
+      ],
+      "recommended_model_3d": "lightgbm",
+      "recommended_model_7d": "last_observed",
+      "audited_at": "2026-10-11T07:39:25.639545"
+    },
+    "potato": {
+      "commodity_id": "potato",
+      "evaluation_date_range": {
+        "start": "2026-09-15",
+        "end": "2026-10-10"
+      },
+      "models": [
+        {
+          "model_name": "last_observed",
+          "is_best_performing": false,
+          "metrics_3d": {
+            "horizon_days": 3,
+            "evaluated_observations_count": 157,
+            "mae": 6.489,
+            "rmse": 7.104,
+            "wape": 0.3065,
+            "directional_accuracy": 0.0,
+            "interval_coverage": null
+          },
+          "metrics_7d": {
+            "horizon_days": 7,
+            "evaluated_observations_count": 153,
+            "mae": 0.093,
+            "rmse": 0.119,
+            "wape": 0.0044,
+            "directional_accuracy": 0.0,
+            "interval_coverage": null
+          }
+        },
+        {
+          "model_name": "rolling_avg",
+          "is_best_performing": false,
+          "metrics_3d": {
+            "horizon_days": 3,
+            "evaluated_observations_count": 157,
+            "mae": 3.361,
+            "rmse": 4.069,
+            "wape": 0.1587,
+            "directional_accuracy": 1.0,
+            "interval_coverage": null
+          },
+          "metrics_7d": {
+            "horizon_days": 7,
+            "evaluated_observations_count": 153,
+            "mae": 3.374,
+            "rmse": 4.071,
+            "wape": 0.1596,
+            "directional_accuracy": 0.524,
+            "interval_coverage": null
+          }
+        },
+        {
+          "model_name": "seasonal_naive",
+          "is_best_performing": false,
+          "metrics_3d": {
+            "horizon_days": 3,
+            "evaluated_observations_count": 157,
+            "mae": 3.578,
+            "rmse": 4.525,
+            "wape": 0.169,
+            "directional_accuracy": 0.86,
+            "interval_coverage": null
+          },
+          "metrics_7d": {
+            "horizon_days": 7,
+            "evaluated_observations_count": 153,
+            "mae": 3.575,
+            "rmse": 4.535,
+            "wape": 0.1691,
+            "directional_accuracy": 0.497,
+            "interval_coverage": null
+          }
+        },
+        {
+          "model_name": "lightgbm",
+          "is_best_performing": true,
+          "metrics_3d": {
+            "horizon_days": 3,
+            "evaluated_observations_count": 157,
+            "mae": 0.249,
+            "rmse": 0.307,
+            "wape": 0.0117,
+            "directional_accuracy": 1.0,
+            "interval_coverage": 0.949
+          },
+          "metrics_7d": {
+            "horizon_days": 7,
+            "evaluated_observations_count": 153,
+            "mae": 0.256,
+            "rmse": 0.313,
+            "wape": 0.0121,
+            "directional_accuracy": 0.531,
+            "interval_coverage": 0.961
+          }
+        }
+      ],
+      "recommended_model_3d": "lightgbm",
+      "recommended_model_7d": "last_observed",
+      "audited_at": "2026-10-11T07:39:25.914584"
+    },
+    "green_chilli": {
+      "commodity_id": "green_chilli",
+      "evaluation_date_range": {
+        "start": "2026-09-15",
+        "end": "2026-10-10"
+      },
+      "models": [
+        {
+          "model_name": "last_observed",
+          "is_best_performing": false,
+          "metrics_3d": {
+            "horizon_days": 3,
+            "evaluated_observations_count": 157,
+            "mae": 17.875,
+            "rmse": 19.601,
+            "wape": 0.3051,
+            "directional_accuracy": 0.0,
+            "interval_coverage": null
+          },
+          "metrics_7d": {
+            "horizon_days": 7,
+            "evaluated_observations_count": 153,
+            "mae": 0.557,
+            "rmse": 0.713,
+            "wape": 0.0095,
+            "directional_accuracy": 0.0,
+            "interval_coverage": null
+          }
+        },
+        {
+          "model_name": "rolling_avg",
+          "is_best_performing": false,
+          "metrics_3d": {
+            "horizon_days": 3,
+            "evaluated_observations_count": 157,
+            "mae": 9.253,
+            "rmse": 11.236,
+            "wape": 0.1579,
+            "directional_accuracy": 1.0,
+            "interval_coverage": null
+          },
+          "metrics_7d": {
+            "horizon_days": 7,
+            "evaluated_observations_count": 153,
+            "mae": 9.294,
+            "rmse": 11.254,
+            "wape": 0.1587,
+            "directional_accuracy": 0.527,
+            "interval_coverage": null
+          }
+        },
+        {
+          "model_name": "seasonal_naive",
+          "is_best_performing": false,
+          "metrics_3d": {
+            "horizon_days": 3,
+            "evaluated_observations_count": 157,
+            "mae": 9.871,
+            "rmse": 12.548,
+            "wape": 0.1685,
+            "directional_accuracy": 0.86,
+            "interval_coverage": null
+          },
+          "metrics_7d": {
+            "horizon_days": 7,
+            "evaluated_observations_count": 153,
+            "mae": 9.891,
+            "rmse": 12.602,
+            "wape": 0.1689,
+            "directional_accuracy": 0.507,
+            "interval_coverage": null
+          }
+        },
+        {
+          "model_name": "lightgbm",
+          "is_best_performing": true,
+          "metrics_3d": {
+            "horizon_days": 3,
+            "evaluated_observations_count": 157,
+            "mae": 1.275,
+            "rmse": 1.825,
+            "wape": 0.0218,
+            "directional_accuracy": 1.0,
+            "interval_coverage": 0.783
+          },
+          "metrics_7d": {
+            "horizon_days": 7,
+            "evaluated_observations_count": 153,
+            "mae": 0.8,
+            "rmse": 1.054,
+            "wape": 0.0137,
+            "directional_accuracy": 0.622,
+            "interval_coverage": 0.765
+          }
+        }
+      ],
+      "recommended_model_3d": "lightgbm",
+      "recommended_model_7d": "last_observed",
+      "audited_at": "2026-10-11T07:39:26.191328"
+    },
+    "pomegranate": {
+      "commodity_id": "pomegranate",
+      "evaluation_date_range": {
+        "start": "2026-09-15",
+        "end": "2026-10-10"
+      },
+      "models": [
+        {
+          "model_name": "last_observed",
+          "is_best_performing": false,
+          "metrics_3d": {
+            "horizon_days": 3,
+            "evaluated_observations_count": 157,
+            "mae": 34.53,
+            "rmse": 37.851,
+            "wape": 0.3053,
+            "directional_accuracy": 0.0,
+            "interval_coverage": null
+          },
+          "metrics_7d": {
+            "horizon_days": 7,
+            "evaluated_observations_count": 153,
+            "mae": 0.99,
+            "rmse": 1.268,
+            "wape": 0.0088,
+            "directional_accuracy": 0.0,
+            "interval_coverage": null
+          }
+        },
+        {
+          "model_name": "rolling_avg",
+          "is_best_performing": false,
+          "metrics_3d": {
+            "horizon_days": 3,
+            "evaluated_observations_count": 157,
+            "mae": 17.875,
+            "rmse": 21.694,
+            "wape": 0.158,
+            "directional_accuracy": 1.0,
+            "interval_coverage": null
+          },
+          "metrics_7d": {
+            "horizon_days": 7,
+            "evaluated_observations_count": 153,
+            "mae": 17.953,
+            "rmse": 21.723,
+            "wape": 0.1588,
+            "directional_accuracy": 0.527,
+            "interval_coverage": null
+          }
+        },
+        {
+          "model_name": "seasonal_naive",
+          "is_best_performing": false,
+          "metrics_3d": {
+            "horizon_days": 3,
+            "evaluated_observations_count": 157,
+            "mae": 19.045,
+            "rmse": 24.209,
+            "wape": 0.1684,
+            "directional_accuracy": 0.86,
+            "interval_coverage": null
+          },
+          "metrics_7d": {
+            "horizon_days": 7,
+            "evaluated_observations_count": 153,
+            "mae": 19.074,
+            "rmse": 24.304,
+            "wape": 0.1687,
+            "directional_accuracy": 0.513,
+            "interval_coverage": null
+          }
+        },
+        {
+          "model_name": "lightgbm",
+          "is_best_performing": true,
+          "metrics_3d": {
+            "horizon_days": 3,
+            "evaluated_observations_count": 157,
+            "mae": 1.902,
+            "rmse": 2.477,
+            "wape": 0.0168,
+            "directional_accuracy": 1.0,
+            "interval_coverage": 0.822
+          },
+          "metrics_7d": {
+            "horizon_days": 7,
+            "evaluated_observations_count": 153,
+            "mae": 1.585,
+            "rmse": 1.973,
+            "wape": 0.014,
+            "directional_accuracy": 0.593,
+            "interval_coverage": 0.824
+          }
+        }
+      ],
+      "recommended_model_3d": "lightgbm",
+      "recommended_model_7d": "last_observed",
+      "audited_at": "2026-10-11T07:39:26.504611"
+    }
+  }
+}
