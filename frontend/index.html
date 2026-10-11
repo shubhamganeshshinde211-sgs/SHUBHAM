@@ -39,11 +39,24 @@
     </div>
 
     <div class="nav-actions">
+      <!-- Multi-Language Selector -->
+      <div class="lang-selector-wrapper">
+        <span class="lang-icon" aria-hidden="true">🌐</span>
+        <select id="langSelect" class="lang-select" aria-label="Select Interface Language" onchange="setLanguage(this.value)">
+          <option value="en">English</option>
+          <option value="hi">हिंदी (Hindi)</option>
+          <option value="mr">मराठी (Marathi)</option>
+        </select>
+      </div>
+
       <div class="status-indicator" id="apiStatusBadge">
         <span class="ticker-pulse-dot"></span> Initializing Engine...
       </div>
       <button class="btn-secondary" id="simulateShockBtn" title="Simulate market price shocks">
         ⚡ Price Volatility
+      </button>
+      <button class="btn-secondary" id="playVideoBtn" title="Watch AI Promo Video">
+        🎥 Demo Video
       </button>
       <button class="btn-primary" id="exportReportBtn">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
@@ -482,6 +495,76 @@
         </div>
       </div>
 
+      <!-- PHASE 6: ECONOMIC DECISION BACKTEST & POLICY WIN RATES -->
+      <div class="card" id="decisionBacktestCard">
+        <div class="card-header">
+          <h3 class="card-title" style="color:var(--emerald-400);">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
+            </svg>
+            Empirical Economic Decision Backtest (Leakage-Free)
+          </h3>
+          <span class="badge-pill" id="backtestDecisionsBadge" style="background:rgba(16, 185, 129, 0.15); color:var(--emerald-400);">165 Decisions • 5 Crops</span>
+        </div>
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:12px;">
+          Chronological walk-forward replay on 2,275 historical APMC observations (Jul 28 – Oct 10, 2026). Evaluates realized net profit at arrival date across 4 dispatch policies vs hindsight theoretical optimum.
+        </p>
+
+        <!-- Backtest High-Level KPIs -->
+        <div class="eval-grid" style="margin-bottom:14px;">
+          <div class="eval-stat-box">
+            <div class="eval-stat-label">Optimizer vs Local Advantage</div>
+            <div class="eval-stat-val" style="color:var(--emerald-400);" id="bkAdvLocalPct">+14.94%</div>
+            <div class="eval-stat-sub" id="bkAdvLocalInr">+₹28,442 net / truck</div>
+          </div>
+          <div class="eval-stat-box">
+            <div class="eval-stat-label">Hindsight Oracle Efficiency</div>
+            <div class="eval-stat-val" style="color:var(--cyan-400);" id="bkOracleEfficiency">99.3%</div>
+            <div class="eval-stat-sub" id="bkOracleRegret">Regret: ₹1,589 / shipment</div>
+          </div>
+          <div class="eval-stat-box">
+            <div class="eval-stat-label">Regret Reduction vs Naive Chasing</div>
+            <div class="eval-stat-val" style="color:var(--emerald-400);" id="bkRegretReduction">₹83,572</div>
+            <div class="eval-stat-sub">Averted long-haul decay traps</div>
+          </div>
+          <div class="eval-stat-box">
+            <div class="eval-stat-label">Optimizer Win Rate vs Local</div>
+            <div class="eval-stat-val" style="color:var(--text-main);" id="bkWinRate">81.8%</div>
+            <div class="eval-stat-sub" id="bkWinRateSub">100% on Onion & Potato</div>
+          </div>
+        </div>
+
+        <!-- Commodity Filter Pills -->
+        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:10px;">
+          <span style="font-size:11px; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Commodity Slice:</span>
+          <button class="badge-pill active" id="btnBkAll" style="cursor:pointer; border:1px solid rgba(16,185,129,0.3); background:rgba(16,185,129,0.15); color:var(--emerald-400);">All (165)</button>
+          <button class="badge-pill" id="btnBkTomato" style="cursor:pointer; border:1px solid rgba(255,255,255,0.1); background:transparent; color:var(--text-muted);">Tomato (33)</button>
+          <button class="badge-pill" id="btnBkOnion" style="cursor:pointer; border:1px solid rgba(255,255,255,0.1); background:transparent; color:var(--text-muted);">Onion (33)</button>
+          <button class="badge-pill" id="btnBkPotato" style="cursor:pointer; border:1px solid rgba(255,255,255,0.1); background:transparent; color:var(--text-muted);">Potato (33)</button>
+          <button class="badge-pill" id="btnBkChilli" style="cursor:pointer; border:1px solid rgba(255,255,255,0.1); background:transparent; color:var(--text-muted);">Green Chilli (33)</button>
+          <button class="badge-pill" id="btnBkPom" style="cursor:pointer; border:1px solid rgba(255,255,255,0.1); background:transparent; color:var(--text-muted);">Pomegranate (33)</button>
+        </div>
+
+        <!-- Empirical Policy Comparison Table -->
+        <div class="table-responsive">
+          <table class="benchmark-table" aria-label="Empirical Policy Backtest Table">
+            <thead>
+              <tr>
+                <th>Dispatch Policy</th>
+                <th>Strategy Formulation</th>
+                <th>Avg Realized Net (5 MT)</th>
+                <th>Net / kg</th>
+                <th>Avg Regret vs Oracle</th>
+                <th>Win vs Local</th>
+              </tr>
+            </thead>
+            <tbody id="backtestTableBody">
+              <!-- Dynamically populated via JS -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
       <!-- Actionable Agronomic & Market Intelligence -->
       <div class="card insights-card">
         <div class="card-header">
@@ -526,7 +609,90 @@
     </div>
   </div>
 
+  <!-- Video Player Modal -->
+  <div class="modal-overlay" id="videoModal" role="dialog" aria-labelledby="videoModalTitle">
+    <div class="modal-card" style="max-width: 900px; padding: 18px;">
+      <div class="modal-header">
+        <h3 class="modal-title" id="videoModalTitle" style="color:var(--emerald-400);">
+          🎬 AgriRoute Intelligence — Official AI Demo Video
+        </h3>
+        <button class="close-btn" id="closeVideoModalBtn" aria-label="Close dialog">&times;</button>
+      </div>
+      <div style="position:relative; width:100%; border-radius:12px; overflow:hidden; background:#000; margin-top:14px; box-shadow:0 8px 32px rgba(0,0,0,0.6);">
+        <video id="promoVideoPlayer" controls style="width:100%; height:auto; display:block;" preload="metadata">
+          <source src="assets/agriroute_demo_video.mp4" type="video/mp4">
+          Your browser does not support the video tag.
+        </video>
+      </div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:14px; font-size:12px; color:var(--text-muted);">
+        <span>Generated with AI Visuals, Telemetry Overlays & Empirical Backtest Data</span>
+        <button class="btn-primary" id="closeVideoModalBtn2">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Floating KisanMitra AI Chatbot Launcher -->
+  <button class="chat-launcher-btn" id="chatLauncherBtn" aria-label="Open KisanMitra AI Assistant" title="Chat with KisanMitra AI">
+    <span class="chat-badge-pulse"></span>
+    <span class="chat-launcher-icon">🤖</span>
+    <span class="chat-launcher-label">Ask KisanMitra AI</span>
+  </button>
+
+  <!-- Floating Chatbot Widget -->
+  <div class="chat-widget-container" id="chatWidgetContainer" style="display:none;" role="dialog" aria-labelledby="chatWidgetTitle">
+    <div class="chat-widget-header">
+      <div class="chat-header-info">
+        <div class="chat-avatar">🌱</div>
+        <div>
+          <div class="chat-title" id="chatWidgetTitle">KisanMitra AI</div>
+          <div class="chat-status"><span class="status-dot"></span> Online • Logistics & Market Advisor</div>
+        </div>
+      </div>
+      <div class="chat-header-actions">
+        <select id="chatLangSelect" class="chat-lang-select" title="Change Language" onchange="setLanguage(this.value)">
+          <option value="en">EN</option>
+          <option value="hi">हिंदी</option>
+          <option value="mr">मराठी</option>
+        </select>
+        <button class="chat-btn-icon" id="chatClearBtn" title="Clear chat history">🗑️</button>
+        <button class="chat-btn-icon" id="chatCloseBtn" title="Close chat">&times;</button>
+      </div>
+    </div>
+
+    <!-- Messages Container -->
+    <div class="chat-messages-area" id="chatMessagesArea">
+      <!-- Default Greeting -->
+      <div class="chat-msg bot">
+        <div class="msg-bubble">
+          <strong>Namaskar! I am KisanMitra AI</strong>, your agricultural dispatch & logistics advisor.<br><br>
+          I calculate real take-home cash after factoring in highway diesel, temperature rotting, and market taxes.<br><br>
+          Ask me anything about your harvest, truck selection, or market profits below!
+        </div>
+      </div>
+    </div>
+
+    <!-- Prompt Suggestion Chips -->
+    <div class="chat-quick-chips" id="chatQuickChips">
+      <button class="chip-btn" data-query="Where should I sell 5000 kg tomato today?">📍 Best market for Tomatoes?</button>
+      <button class="chip-btn" data-query="Why is sending tomatoes to Delhi a trap?">⚠️ Why avoid Delhi?</button>
+      <button class="chip-btn" data-query="Should I use a Reefer truck for Onions?">🚚 Reefer truck for Onions?</button>
+      <button class="chip-btn" data-query="What is the +14.9% backtest proof?">📊 Show Backtest Proof</button>
+    </div>
+
+    <!-- Input Bar -->
+    <div class="chat-input-bar">
+      <input type="text" id="chatTextInput" class="chat-input-field" placeholder="Ask in English, Hindi, or Marathi..." />
+      <button id="chatSendBtn" class="chat-send-btn" title="Send message">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="22" y1="2" x2="11" y2="13"></line>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+        </svg>
+      </button>
+    </div>
+  </div>
+
   <!-- Scripts -->
+  <script src="js/i18n.js"></script>
   <script src="js/engine.js"></script>
   <script src="js/api.js"></script>
   <script src="js/app.js"></script>

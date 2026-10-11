@@ -1,0 +1,180 @@
+{
+  "audited_at": "2026-10-11T09:11:45.241545Z",
+  "evaluation_methodology": "Chronological Walk-Forward Simulation (Zero Future Leakage)",
+  "total_decisions_evaluated": 165,
+  "overall_summary": {
+    "avg_realized_net_inr": {
+      "policy_a_local": 190371.56,
+      "policy_b_highest_observed": 135240.64,
+      "policy_c_highest_forecast": 135240.64,
+      "policy_d_optimizer": 218813.13,
+      "hindsight_oracle": 220402.06
+    },
+    "optimizer_net_advantage_vs_local_inr": 28441.56,
+    "optimizer_net_advantage_vs_local_percent": 14.94,
+    "optimizer_net_advantage_vs_highest_observed_inr": 83572.48,
+    "average_regret_reduction_vs_naive_inr": 83572.48
+  },
+  "commodity_breakdowns": {
+    "tomato": {
+      "evaluated_decisions_count": 33,
+      "date_range": {
+        "start": "2026-08-26",
+        "end": "2026-10-02"
+      },
+      "avg_realized_net_inr": {
+        "policy_a_local": 129530.58,
+        "policy_b_highest_observed": -6084.68,
+        "policy_c_highest_forecast": -6084.68,
+        "policy_d_optimizer": 125576.15,
+        "hindsight_oracle": 130063.3
+      },
+      "avg_realized_net_per_kg": {
+        "policy_a_local": 25.91,
+        "policy_b_highest_observed": -1.22,
+        "policy_c_highest_forecast": -1.22,
+        "policy_d_optimizer": 25.12
+      },
+      "optimizer_advantage_vs_local_inr": -3954.43,
+      "optimizer_advantage_vs_local_pct": -3.05,
+      "optimizer_advantage_vs_observed_inr": 131660.83,
+      "avg_regret_vs_oracle_inr": {
+        "policy_a_local": 532.72,
+        "policy_b_highest_observed": 136147.98,
+        "policy_d_optimizer": 4487.15
+      },
+      "win_rates_percent": {
+        "optimizer_exceeds_or_equals_local": 27.3,
+        "optimizer_exceeds_or_equals_highest_observed": 100.0
+      }
+    },
+    "onion": {
+      "evaluated_decisions_count": 33,
+      "date_range": {
+        "start": "2026-08-26",
+        "end": "2026-10-02"
+      },
+      "avg_realized_net_inr": {
+        "policy_a_local": 97500.29,
+        "policy_b_highest_observed": 114805.79,
+        "policy_c_highest_forecast": 114805.79,
+        "policy_d_optimizer": 121344.67,
+        "hindsight_oracle": 121344.67
+      },
+      "avg_realized_net_per_kg": {
+        "policy_a_local": 19.5,
+        "policy_b_highest_observed": 22.96,
+        "policy_c_highest_forecast": 22.96,
+        "policy_d_optimizer": 24.27
+      },
+      "optimizer_advantage_vs_local_inr": 23844.38,
+      "optimizer_advantage_vs_local_pct": 24.46,
+      "optimizer_advantage_vs_observed_inr": 6538.88,
+      "avg_regret_vs_oracle_inr": {
+        "policy_a_local": 23844.38,
+        "policy_b_highest_observed": 6538.88,
+        "policy_d_optimizer": 0.0
+      },
+      "win_rates_percent": {
+        "optimizer_exceeds_or_equals_local": 100.0,
+        "optimizer_exceeds_or_equals_highest_observed": 100.0
+      }
+    },
+    "potato": {
+      "evaluated_decisions_count": 33,
+      "date_range": {
+        "start": "2026-08-26",
+        "end": "2026-10-02"
+      },
+      "avg_realized_net_inr": {
+        "policy_a_local": 77536.61,
+        "policy_b_highest_observed": 80629.1,
+        "policy_c_highest_forecast": 80629.1,
+        "policy_d_optimizer": 95162.64,
+        "hindsight_oracle": 95162.64
+      },
+      "avg_realized_net_per_kg": {
+        "policy_a_local": 15.51,
+        "policy_b_highest_observed": 16.13,
+        "policy_c_highest_forecast": 16.13,
+        "policy_d_optimizer": 19.03
+      },
+      "optimizer_advantage_vs_local_inr": 17626.03,
+      "optimizer_advantage_vs_local_pct": 22.73,
+      "optimizer_advantage_vs_observed_inr": 14533.54,
+      "avg_regret_vs_oracle_inr": {
+        "policy_a_local": 17626.03,
+        "policy_b_highest_observed": 14533.54,
+        "policy_d_optimizer": 0.0
+      },
+      "win_rates_percent": {
+        "optimizer_exceeds_or_equals_local": 100.0,
+        "optimizer_exceeds_or_equals_highest_observed": 100.0
+      }
+    },
+    "green_chilli": {
+      "evaluated_decisions_count": 33,
+      "date_range": {
+        "start": "2026-08-26",
+        "end": "2026-10-02"
+      },
+      "avg_realized_net_inr": {
+        "policy_a_local": 212542.05,
+        "policy_b_highest_observed": 18956.89,
+        "policy_c_highest_forecast": 18956.89,
+        "policy_d_optimizer": 212157.14,
+        "hindsight_oracle": 215614.64
+      },
+      "avg_realized_net_per_kg": {
+        "policy_a_local": 42.51,
+        "policy_b_highest_observed": 3.79,
+        "policy_c_highest_forecast": 3.79,
+        "policy_d_optimizer": 42.43
+      },
+      "optimizer_advantage_vs_local_inr": -384.91,
+      "optimizer_advantage_vs_local_pct": -0.18,
+      "optimizer_advantage_vs_observed_inr": 193200.26,
+      "avg_regret_vs_oracle_inr": {
+        "policy_a_local": 3072.59,
+        "policy_b_highest_observed": 196657.76,
+        "policy_d_optimizer": 3457.5
+      },
+      "win_rates_percent": {
+        "optimizer_exceeds_or_equals_local": 51.5,
+        "optimizer_exceeds_or_equals_highest_observed": 100.0
+      }
+    },
+    "pomegranate": {
+      "evaluated_decisions_count": 33,
+      "date_range": {
+        "start": "2026-08-26",
+        "end": "2026-10-02"
+      },
+      "avg_realized_net_inr": {
+        "policy_a_local": 434748.29,
+        "policy_b_highest_observed": 467896.13,
+        "policy_c_highest_forecast": 467896.13,
+        "policy_d_optimizer": 539825.04,
+        "hindsight_oracle": 539825.04
+      },
+      "avg_realized_net_per_kg": {
+        "policy_a_local": 86.95,
+        "policy_b_highest_observed": 93.58,
+        "policy_c_highest_forecast": 93.58,
+        "policy_d_optimizer": 107.97
+      },
+      "optimizer_advantage_vs_local_inr": 105076.75,
+      "optimizer_advantage_vs_local_pct": 24.17,
+      "optimizer_advantage_vs_observed_inr": 71928.91,
+      "avg_regret_vs_oracle_inr": {
+        "policy_a_local": 105076.75,
+        "policy_b_highest_observed": 71928.91,
+        "policy_d_optimizer": 0.0
+      },
+      "win_rates_percent": {
+        "optimizer_exceeds_or_equals_local": 100.0,
+        "optimizer_exceeds_or_equals_highest_observed": 100.0
+      }
+    }
+  }
+}

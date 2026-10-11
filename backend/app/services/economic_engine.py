@@ -243,6 +243,11 @@ class AuthoritativeEconomicEngine:
         net_per_kg = round(net_realization / max(1.0, inp.quantity_kg), 2)
         profit_margin = round((net_realization / gross_realized * 100.0) if gross_realized > 0 else 0.0, 1)
 
+        if net_realization < 0:
+            warnings.append(
+                f"Negative net realization (₹{net_realization:,.2f}): Total logistics and market deductions exceed gross realized revenue."
+            )
+
         return AuthoritativeEconomicBreakdown(
             initial_quantity_kg=inp.quantity_kg,
             expected_quantity_sold_kg=sold_kg,

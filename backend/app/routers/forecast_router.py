@@ -11,6 +11,9 @@ router = APIRouter(prefix="/api/forecasts", tags=["Price Forecasting"])
 
 engine = PriceForecastingEngine()
 
+import json
+from pathlib import Path
+
 @router.get("/evaluation")
 def get_model_evaluation():
     """
@@ -19,6 +22,19 @@ def get_model_evaluation():
     sample sizes, evaluation date spans, and horizon MAE/RMSE/WAPE.
     """
     return engine.get_evaluation_results()
+
+@router.get("/decision-backtest")
+def get_decision_backtest():
+    """
+    Returns empirical chronological walk-forward economic decision backtest results
+    comparing the optimizer against Local-only, Highest Observed Price, and
+    Highest Forecast Price baselines, alongside Hindsight Oracle benchmarks.
+    """
+    results_path = Path(__file__).resolve().parent.parent / "forecasting" / "models" / "decision_backtest_results.json"
+    if not results_path.exists():
+        raise HTTPException(status_code=404, detail="Decision backtest results not found. Run decision_backtester.py first.")
+    with open(results_path, "r", encoding="utf-8") as f:
+        return json.load(f)
 
 @router.get("/{crop_id}", response_model=List[MandiPriceForecast])
 def get_crop_forecasts(

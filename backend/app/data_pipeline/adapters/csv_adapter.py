@@ -25,7 +25,17 @@ MARKET_MAPPING = {
     "azadpur": "azadpur_delhi",
     "delhi": "azadpur_delhi",
     "bowenpally": "bowenpally_hyderabad",
-    "hyderabad": "bowenpally_hyderabad"
+    "hyderabad": "bowenpally_hyderabad",
+    "solapur": "solapur_apmc",
+    "nagpur": "nagpur_kalamna",
+    "kalamna": "nagpur_kalamna",
+    "sambhajinagar": "sambhaji_nagar_jadhavwadi",
+    "aurangabad": "sambhaji_nagar_jadhavwadi",
+    "jadhavwadi": "sambhaji_nagar_jadhavwadi",
+    "kolhapur": "kolhapur_shahupuri",
+    "shahupuri": "kolhapur_shahupuri",
+    "ahmednagar": "ahmednagar_apmc",
+    "sangli": "sangli_apmc"
 }
 
 COMMODITY_MAPPING = {

@@ -79,3 +79,54 @@ def test_realization_backward_compatibility(client):
     # Net = 28500 - 2800 = 25700
     assert data["net_realization"] == 25700.0
     assert data["net_per_kg"] == 25.7
+
+def test_decision_backtest_endpoint(client):
+    res = client.get("/api/forecasts/decision-backtest")
+    assert res.status_code == 200
+    data = res.json()
+    assert "total_decisions_evaluated" in data
+    assert data["total_decisions_evaluated"] == 165
+    assert "overall_summary" in data
+    assert "optimizer_net_advantage_vs_local_percent" in data["overall_summary"]
+    assert data["overall_summary"]["optimizer_net_advantage_vs_local_percent"] == 14.94
+    assert "commodity_breakdowns" in data
+    assert "tomato" in data["commodity_breakdowns"]
+    assert "onion" in data["commodity_breakdowns"]
+
+def test_chat_endpoint(client):
+    # 1. Greeting
+    res1 = client.post("/api/chat", json={"message": "Namaste KisanMitra"})
+    assert res1.status_code == 200
+    data1 = res1.json()
+    assert "reply" in data1
+    assert "KisanMitra" in data1["reply"]
+
+    # 2. Optimization query
+    res2 = client.post("/api/chat", json={"message": "Where should I sell 5000 kg tomato from Nashik?"})
+    assert res2.status_code == 200
+    data2 = res2.json()
+    assert "Recommended Destination" in data2["reply"]
+    assert data2["applied_crop_id"] == "tomato"
+    assert data2["calculation_summary"] is not None
+
+    # 3. Reefer question
+    res3 = client.post("/api/chat", json={"message": "Should I use a reefer truck for onions?"})
+    assert res3.status_code == 200
+    data3 = res3.json()
+    assert "Reefer" in data3["reply"]
+    assert "Do NOT hire a Reefer truck for Onions" in data3["reply"]
+
+    # 4. Hindi Multilingual Query
+    res_hi = client.post("/api/chat", json={"message": "5000 किलो टमाटर कहाँ बेचें?", "language": "hi"})
+    assert res_hi.status_code == 200
+    data_hi = res_hi.json()
+    assert "अनुशंसित मंडी" in data_hi["reply"] or "टमाटर" in data_hi["reply"]
+    assert data_hi["applied_crop_id"] == "tomato"
+
+    # 5. Marathi Multilingual Query
+    res_mr = client.post("/api/chat", json={"message": "कांद्यासाठी AC रीफर ट्रक वापरावा का?", "language": "mr"})
+    assert res_mr.status_code == 200
+    data_mr = res_mr.json()
+    assert "कांदा" in data_mr["reply"] or "रीफर" in data_mr["reply"]
+
+

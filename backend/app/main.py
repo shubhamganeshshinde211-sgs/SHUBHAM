@@ -9,6 +9,7 @@ from backend.app.routers.optimizer_router import router as optimizer_router
 from backend.app.routers.market_router import router as market_router
 from backend.app.routers.realization_router import router as realization_router
 from backend.app.routers.forecast_router import router as forecast_router
+from backend.app.routers.chat_router import router as chat_router
 
 app = FastAPI(
     title="AgriRoute Intelligence",
@@ -30,6 +31,7 @@ app.include_router(optimizer_router)
 app.include_router(market_router)
 app.include_router(realization_router)
 app.include_router(forecast_router)
+app.include_router(chat_router)
 
 @app.get("/api/data-quality", tags=["Data Pipeline"])
 def data_quality_summary():
