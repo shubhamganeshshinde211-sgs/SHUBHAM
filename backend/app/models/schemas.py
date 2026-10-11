@@ -67,6 +67,80 @@ class RealizationBreakdown(BaseModel):
     net_per_kg: float
     profit_margin_percent: float
 
+class RiskPolicy(str, Enum):
+    CONSERVATIVE = "conservative"
+    BALANCED = "balanced"
+    RETURN_SEEKING = "return_seeking"
+
+class ScenarioEvaluationSchema(BaseModel):
+    scenario_id: str
+    scenario_name: str
+    description: str
+    price_factor: float
+    freight_factor: float
+    decay_factor: float
+    effective_price_per_kg: float
+    transit_loss_fraction: float
+    net_realization: float
+    net_per_kg: float
+    profit_margin_percent: float
+    variance_versus_expected_inr: float
+    is_downside: bool
+
+class MandiRiskProfileSchema(BaseModel):
+    mandi_id: str
+    mandi_name: str
+    expected_net_realization: float
+    risk_adjusted_score: float
+    risk_policy: str
+    scenarios: List[ScenarioEvaluationSchema]
+    downside_var_90_inr: float
+    max_drawdown_versus_local_inr: float
+    downside_risk_ratio: float
+    is_resilient: bool
+    policy_explanation: str
+
+class AllocationSplitItem(BaseModel):
+    mandi_id: str
+    mandi_name: str
+    state: str
+    allocated_quantity_kg: float
+    allocated_percentage: float
+    effective_price_per_kg: float
+    distance_km: float
+    transit_loss_fraction: float
+    net_realization: float
+    net_per_kg: float
+    assigned_vehicles_count: int
+    vehicle_type: VehicleType
+
+class PolicyBenchmarkItem(BaseModel):
+    policy_name: str
+    policy_description: str
+    allocated_destinations: List[str]
+    total_net_realization: float
+    net_per_kg: float
+    total_spoilage_kg: float
+    total_freight_cost: float
+    variance_versus_local_inr: float
+    variance_versus_local_percent: float
+    is_recommended: bool = False
+
+class MultiMarketAllocationPlanSchema(BaseModel):
+    total_crop_quantity_kg: float
+    unallocated_quantity_kg: float
+    splits: List[AllocationSplitItem]
+    total_gross_revenue: float
+    total_freight_cost: float
+    total_handling_cost: float
+    total_market_cess: float
+    total_holding_cost: float
+    total_net_realization: float
+    average_net_per_kg: float
+    total_spoilage_kg: float
+    benchmarks: List[PolicyBenchmarkItem]
+    allocation_rationale: str
+
 class OptimizationRequest(BaseModel):
     origin_name: str = Field(default="Nashik Farm Cluster")
     crop_id: str = Field(default="tomato")
@@ -77,6 +151,8 @@ class OptimizationRequest(BaseModel):
     custom_mandis: Optional[List[MandiInfo]] = None
     forecast_horizon_days: Optional[int] = Field(default=None, description="Optional 3 or 7 day horizon for forecast-aware dispatch")
     decision_policy: Optional[str] = Field(default="immediate", description="'immediate' or 'forecast_aware'")
+    risk_policy: Optional[str] = Field(default="balanced", description="'conservative', 'balanced', or 'return_seeking'")
+    allow_multi_market_split: Optional[bool] = Field(default=True, description="Enable LP solver for multi-mandi produce split")
 
 class MandiRouteResult(BaseModel):
     mandi_id: str
@@ -108,6 +184,13 @@ class MandiRouteResult(BaseModel):
     timing_recommendation: Optional[str] = None
     net_realization_forecast: Optional[float] = None
 
+    # Risk-aware & scenario fields
+    risk_adjusted_score: Optional[float] = None
+    downside_var_90_inr: Optional[float] = None
+    is_resilient: Optional[bool] = None
+    scenarios: Optional[List[ScenarioEvaluationSchema]] = None
+    risk_policy_explanation: Optional[str] = None
+
 class OptimizationResponse(BaseModel):
     origin_name: str
     crop: CropProfile
@@ -119,3 +202,9 @@ class OptimizationResponse(BaseModel):
     insights: List[str]
     active_data_mode: str = "HISTORICAL_DATA"
     forecast_applied: bool = False
+    
+    # Phase 5 additions
+    allocation_plan: Optional[MultiMarketAllocationPlanSchema] = None
+    risk_policy_applied: str = "balanced"
+    local_baseline_net: float = 0.0
+

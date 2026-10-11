@@ -158,6 +158,19 @@
             <button class="horizon-btn" data-horizon="7" data-policy="forecast_aware">7D Model</button>
           </div>
         </div>
+
+        <!-- Operational Risk Policy -->
+        <div class="form-group">
+          <label class="form-label">
+            <span>Operational Risk Policy</span>
+            <span class="value-highlight" id="riskPolicyDisplay">Balanced</span>
+          </label>
+          <div class="risk-btn-group" id="riskButtonGroup">
+            <button class="risk-btn" data-risk="conservative">Conservative</button>
+            <button class="risk-btn active" data-risk="balanced">Balanced</button>
+            <button class="risk-btn" data-risk="return_seeking">Return-Seeking</button>
+          </div>
+        </div>
       </section>
 
     </aside>
@@ -340,6 +353,91 @@
               <!-- Dynamically populated rows -->
             </tbody>
           </table>
+        </div>
+      </div>
+
+      <!-- PHASE 5: MULTI-MARKET ALLOCATION & BENCHMARK COMPARISON -->
+      <div class="card" id="allocationCard">
+        <div class="card-header">
+          <h3 class="card-title" style="color:var(--emerald-400);">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="10"></circle>
+              <polyline points="12 6 12 12 16 14"></polyline>
+            </svg>
+            Multi-Market Allocation & Policy Benchmarks
+          </h3>
+          <span class="badge-pill" id="allocationRationaleBadge">LP Solver Active</span>
+        </div>
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:8px;" id="allocationRationaleText">
+          Constrained optimization solves whether to dispatch to a single market or split across regional mandis to avoid local price depression.
+        </p>
+
+        <!-- Allocation Splits Grid -->
+        <div class="allocation-grid" id="allocationSplitsGrid">
+          <!-- Dynamically populated allocation splits -->
+        </div>
+
+        <!-- Policy Benchmark Comparison Table -->
+        <div class="table-responsive" style="margin-top:14px;">
+          <table class="benchmark-table" aria-label="Policy benchmark table">
+            <thead>
+              <tr>
+                <th>Dispatch Policy</th>
+                <th>Strategy Description</th>
+                <th>Total Net (₹)</th>
+                <th>Net / kg</th>
+                <th>Variance vs Local Baseline</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody id="benchmarkTableBody">
+              <!-- Dynamically populated benchmark rows -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- PHASE 5: SCENARIO SENSITIVITY & STRESS-TESTING -->
+      <div class="card" id="scenarioCard">
+        <div class="card-header">
+          <h3 class="card-title" style="color:var(--amber-400);">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+            </svg>
+            Operational Uncertainty & Scenario Stress Testing
+          </h3>
+          <span class="badge-pill" id="scenarioVarBadge" style="background:rgba(239, 68, 68, 0.15); color:#f87171;">VaR-90 Downside</span>
+        </div>
+        <p style="font-size:12px; color:var(--text-muted); margin-bottom:8px;" id="scenarioPolicyExplanation">
+          Stress-testing candidate destination against sudden market price drops, fuel surges, and heat-wave delays.
+        </p>
+
+        <div class="table-responsive">
+          <table class="scenario-table" aria-label="Scenario stress testing table">
+            <thead>
+              <tr>
+                <th>Stress Scenario</th>
+                <th>Operational Assumption</th>
+                <th>Effective Price</th>
+                <th>Transit Spoilage</th>
+                <th>Net Realization (₹)</th>
+                <th>Net / kg</th>
+                <th>Variance vs Expected</th>
+              </tr>
+            </thead>
+            <tbody id="scenarioTableBody">
+              <!-- Dynamically populated scenario rows -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Single Authoritative Economic Model Disclosure -->
+        <div class="formula-box">
+          <strong style="color:var(--text-main);">AUTHORITATIVE ECONOMIC FORMULA (SINGLE TRUTH ENGINE):</strong><br>
+          <code>Net In-Pocket = Q_sold × P_quality - (C_freight + C_handling + C_cess + C_holding)</code><br>
+          <span style="color:var(--text-dim); font-size:11px;">
+            • Mass Conserved: <code>Q_sold + Q_lost = Q_initial</code> • Spoilage deducted once from physical quantity • Quality-adjusted price applied.
+          </span>
         </div>
       </div>
 

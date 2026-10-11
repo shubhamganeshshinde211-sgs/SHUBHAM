@@ -114,7 +114,9 @@ async function requestOptimization(params) {
         ambient_temp_celsius: params.ambientTemp,
         fuel_rate_per_km_multiplier: params.fuelMultiplier,
         forecast_horizon_days: params.forecastHorizonDays || 3,
-        decision_policy: params.decisionPolicy || "immediate"
+        decision_policy: params.decisionPolicy || "immediate",
+        risk_policy: params.riskPolicy || "balanced",
+        allow_multi_market_split: params.allowSplit !== false
       };
 
       const res = await fetch(`${API_BASE}/api/routes/optimize`, {
@@ -172,13 +174,18 @@ function adaptBackendResponse(data) {
     forecastStatus: r.forecast_status,
     timingRecommendation: r.timing_recommendation,
     futureNetRealization: r.net_realization_forecast,
+    riskAdjustedScore: r.risk_adjusted_score,
+    downsideVar90: r.downside_var_90_inr,
+    isResilient: r.is_resilient,
+    scenarios: r.scenarios || [],
+    riskPolicyExplanation: r.risk_policy_explanation,
     x: getMandiCoords(r.mandi_id).x,
     y: getMandiCoords(r.mandi_id).y
   }));
 
   const crop = CROPS[data.crop.id] || CROPS.tomato;
   const winner = routes[0];
-  const local = routes.find(r => r.distanceKm <= 50);
+  const local = routes.find(r => r.distanceKm <= 60) || routes[0];
 
   return {
     crop,
@@ -190,7 +197,10 @@ function adaptBackendResponse(data) {
     local,
     insights: data.insights,
     activeDataMode: data.active_data_mode,
-    forecastApplied: data.forecast_applied
+    forecastApplied: data.forecast_applied,
+    allocationPlan: data.allocation_plan,
+    riskPolicyApplied: data.risk_policy_applied || "balanced",
+    localBaselineNet: data.local_baseline_net || (local ? local.netRealization : 0)
   };
 }
 

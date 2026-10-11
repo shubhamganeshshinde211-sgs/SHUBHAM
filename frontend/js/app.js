@@ -13,6 +13,7 @@ const appState = {
   fuelMultiplier: 1.0,
   forecastHorizonDays: 0,
   decisionPolicy: "immediate",
+  riskPolicy: "balanced",
   lastOptimization: null,
   truckAnimProgress: 0
 };
@@ -130,6 +131,20 @@ function setupEventListeners() {
     });
   });
 
+  // Risk Policy Buttons
+  document.querySelectorAll(".risk-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".risk-btn").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      appState.riskPolicy = btn.dataset.risk;
+      const display = document.getElementById("riskPolicyDisplay");
+      if (display) {
+        display.textContent = btn.textContent;
+      }
+      runOptimization();
+    });
+  });
+
   // Modal close
   const closeModal = document.getElementById("closeModalBtn");
   const modalOverlay = document.getElementById("auditModal");
@@ -163,17 +178,141 @@ async function runOptimization() {
     ambientTemp: appState.ambientTemp,
     fuelMultiplier: appState.fuelMultiplier,
     forecastHorizonDays: appState.forecastHorizonDays,
-    decisionPolicy: appState.decisionPolicy
+    decisionPolicy: appState.decisionPolicy,
+    riskPolicy: appState.riskPolicy
   });
 
   appState.lastOptimization = result;
   updateKPIs(result);
   updateWaterfall(result.winner);
   updateLeaderboardTable(result.routes);
+  updateAllocationPlan(result.allocationPlan);
+  updateScenarioStressTable(result.winner);
   updateInsights(result.insights);
   renderCorridorCanvas(result);
   await updateEvaluationMetrics();
 }
+
+function updateAllocationPlan(plan) {
+  if (!plan) return;
+  const grid = document.getElementById("allocationSplitsGrid");
+  const rationaleText = document.getElementById("allocationRationaleText");
+  const rationaleBadge = document.getElementById("allocationRationaleBadge");
+  const tbody = document.getElementById("benchmarkTableBody");
+
+  if (rationaleText && plan.allocation_rationale) {
+    rationaleText.textContent = plan.allocation_rationale;
+  }
+  if (rationaleBadge && plan.splits) {
+    rationaleBadge.textContent = plan.splits.length > 1 ? `Split: ${plan.splits.length} Mandis` : "Single Terminal";
+  }
+
+  if (grid && plan.splits) {
+    grid.innerHTML = "";
+    plan.splits.forEach(s => {
+      const item = document.createElement("div");
+      item.className = "allocation-item";
+      const share = s.allocated_percentage !== undefined ? s.allocated_percentage : s.allocatedPercentage;
+      const qty = s.allocated_quantity_kg !== undefined ? s.allocated_quantity_kg : s.allocatedQuantityKg;
+      const name = s.mandi_name || s.mandiName;
+      const net = s.net_realization !== undefined ? s.net_realization : s.netRealization;
+      const perKg = s.net_per_kg !== undefined ? s.net_per_kg : s.netPerKg;
+      const lossF = s.transit_loss_fraction !== undefined ? s.transit_loss_fraction : s.transitLossFraction;
+      const trucks = s.assigned_vehicles_count !== undefined ? s.assigned_vehicles_count : s.assignedVehiclesCount;
+
+      item.innerHTML = `
+        <div class="alloc-header">
+          <span class="alloc-name">${name}</span>
+          <span class="alloc-share">${share.toFixed(0)}%</span>
+        </div>
+        <div class="alloc-meta">
+          <strong>${qty.toLocaleString()} kg</strong>
+          • ${trucks || 1} truck(s) • ${(lossF * 100).toFixed(1)}% loss
+        </div>
+        <div class="alloc-net">
+          ₹${net.toLocaleString('en-IN', {maximumFractionDigits: 0})}
+          <span style="font-size:11px; color:var(--text-dim); font-weight:normal;">(₹${perKg.toFixed(2)}/kg)</span>
+        </div>
+      `;
+      grid.appendChild(item);
+    });
+  }
+
+  if (tbody && plan.benchmarks) {
+    tbody.innerHTML = "";
+    plan.benchmarks.forEach(b => {
+      const isWinner = b.is_recommended !== undefined ? b.is_recommended : b.isRecommended;
+      const tr = document.createElement("tr");
+      tr.className = `benchmark-row ${isWinner ? "winner" : ""}`;
+      const varInr = b.variance_versus_local_inr !== undefined ? b.variance_versus_local_inr : b.varianceVersusLocalInr;
+      const varPct = b.variance_versus_local_percent !== undefined ? b.variance_versus_local_percent : b.varianceVersusLocalPercent;
+      const totalNet = b.total_net_realization !== undefined ? b.total_net_realization : b.totalNetRealization;
+      const perKg = b.net_per_kg !== undefined ? b.net_per_kg : b.netPerKg;
+      const name = b.policy_name || b.policyName;
+      const desc = b.policy_description || b.policyDescription;
+
+      const varText = varInr > 0 
+        ? `<strong style="color:var(--emerald-400);">+₹${varInr.toLocaleString('en-IN', {maximumFractionDigits: 0})} (+${varPct.toFixed(1)}%)</strong>`
+        : (varInr < 0 
+            ? `<span style="color:#f87171;">-₹${Math.abs(varInr).toLocaleString('en-IN', {maximumFractionDigits: 0})} (${varPct.toFixed(1)}%)</span>`
+            : `<span style="color:var(--text-dim);">Baseline (₹0)</span>`);
+
+      tr.innerHTML = `
+        <td><strong style="color:${isWinner ? 'var(--emerald-400)' : 'var(--text-main)'};">${name}</strong></td>
+        <td><span style="color:var(--text-muted); font-size:11.5px;">${desc}</span></td>
+        <td><strong>₹${totalNet.toLocaleString('en-IN', {maximumFractionDigits: 0})}</strong></td>
+        <td>₹${perKg.toFixed(2)} / kg</td>
+        <td>${varText}</td>
+        <td>${isWinner ? '<span class="badge-pill" style="background:rgba(16, 185, 129, 0.2); color:var(--emerald-400);">★ Optimal</span>' : '<span style="color:var(--text-dim); font-size:11px;">Baseline</span>'}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+}
+
+function updateScenarioStressTable(route) {
+  if (!route) return;
+  const tbody = document.getElementById("scenarioTableBody");
+  const varBadge = document.getElementById("scenarioVarBadge");
+  const explText = document.getElementById("scenarioPolicyExplanation");
+
+  if (varBadge && route.downsideVar90 !== undefined) {
+    varBadge.textContent = `Max Downside VaR-90: -₹${route.downsideVar90.toLocaleString('en-IN', {maximumFractionDigits: 0})}`;
+  }
+  if (explText && route.riskPolicyExplanation) {
+    explText.textContent = route.riskPolicyExplanation;
+  }
+
+  if (tbody && route.scenarios && route.scenarios.length > 0) {
+    tbody.innerHTML = "";
+    route.scenarios.forEach(sc => {
+      const tr = document.createElement("tr");
+      const varInr = sc.variance_versus_expected_inr !== undefined ? sc.variance_versus_expected_inr : sc.varianceVersusExpectedInr;
+      const varClass = varInr < 0 ? "scenario-downside" : (varInr > 0 ? "scenario-upside" : "");
+      const varText = varInr > 0 
+        ? `+₹${varInr.toLocaleString('en-IN', {maximumFractionDigits: 0})}` 
+        : (varInr < 0 ? `-₹${Math.abs(varInr).toLocaleString('en-IN', {maximumFractionDigits: 0})}` : "₹0 (Baseline)");
+
+      const name = sc.scenario_name || sc.scenarioName;
+      const price = sc.effective_price_per_kg !== undefined ? sc.effective_price_per_kg : sc.effectivePricePerKg;
+      const loss = sc.transit_loss_fraction !== undefined ? sc.transit_loss_fraction : sc.transitLossFraction;
+      const net = sc.net_realization !== undefined ? sc.net_realization : sc.netRealization;
+      const perKg = sc.net_per_kg !== undefined ? sc.net_per_kg : sc.netPerKg;
+
+      tr.innerHTML = `
+        <td><strong>${name}</strong></td>
+        <td style="color:var(--text-muted); font-size:11px;">${sc.description}</td>
+        <td>₹${price.toFixed(1)}/kg</td>
+        <td>${(loss * 100).toFixed(1)}%</td>
+        <td><strong>₹${net.toLocaleString('en-IN', {maximumFractionDigits: 0})}</strong></td>
+        <td>₹${perKg.toFixed(2)}/kg</td>
+        <td class="${varClass}"><strong>${varText}</strong></td>
+      `;
+      tbody.appendChild(tr);
+    });
+  }
+}
+
 
 async function updateEvaluationMetrics() {
   const evalData = await fetchForecastEvaluation();
